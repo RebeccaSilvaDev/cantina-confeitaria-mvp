@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cantina & Confeitaria Artesanal — Painel</title>
+    <style>
+        body { font-family: system-ui, sans-serif; margin: 1rem; background: #fafafa; color: #1a1a1a; }
+        .alerta { background: #fdecea; border-left: 5px solid #b71c1c; padding: 1rem; margin-bottom: 1rem; }
+        button { min-width: 44px; min-height: 44px; padding: 0.75rem 1.25rem; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Painel Central — Estoque e Alertas</h1>
+        {% for alerta in alertas %}
+        <div class="alerta" role="alert">
+            <strong>⚠️ ATENÇÃO:</strong> {{ alerta.nome }} em nível crítico ({{ alerta.quantidade }} restante).
+        </div>
+        {% endfor %}
+        <button type="submit">Registrar Venda</button>
+    </main>
+</body>
+</html>
