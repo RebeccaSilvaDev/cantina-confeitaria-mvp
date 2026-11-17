@@ -1,24 +1,829 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cantina & Confeitaria Artesanal — Painel</title>
-    <style>
-        body { font-family: system-ui, sans-serif; margin: 1rem; background: #fafafa; color: #1a1a1a; }
-        .alerta { background: #fdecea; border-left: 5px solid #b71c1c; padding: 1rem; margin-bottom: 1rem; }
-        button { min-width: 44px; min-height: 44px; padding: 0.75rem 1.25rem; font-weight: bold; cursor: pointer; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cantina & Confeitaria Artesanal</title>
+
+<style>
+:root {
+    --bg: #1a1a1a;
+    --card: #424242;
+    --text: #f2f2f2;
+    --gold: #d4af37;
+    --gold-hover: #e5c158;
+    --table: #333;
+    --border: #555;
+    --muted: #bbb;
+    --font-size: 16px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    padding: 30px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    font-size: var(--font-size);
+    transition: background .2s, color .2s;
+}
+
+.container {
+    max-width: 1050px;
+    margin: auto;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.brand {
+    color: var(--gold);
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.page { display: none; }
+.page.active { display: block; }
+
+.panel {
+    background: var(--card);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,.4);
+}
+
+h1 {
+    font-size: 1.8em;
+    margin-top: 0;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--gold);
+}
+
+h2 { font-size: 1.3em; }
+
+.subtitle { color: var(--muted); }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin: 25px 0;
+}
+
+.stat {
+    background: var(--table);
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid var(--gold);
+}
+
+.stat span {
+    display: block;
+    color: var(--muted);
+    margin-bottom: 10px;
+}
+
+.stat strong {
+    font-size: 1.8em;
+    color: var(--gold);
+}
+
+button, .btn {
+    display: inline-block;
+    padding: 11px 16px;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    background: var(--gold);
+    color: #1a1a1a;
+    font: inherit;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+button:hover, .btn:hover {
+    background: var(--gold-hover);
+}
+
+button:focus-visible, a:focus-visible, input:focus-visible {
+    outline: 3px solid var(--text);
+    outline-offset: 4px;
+}
+
+.btn-secondary {
+    background: transparent;
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.btn-secondary:hover {
+    background: var(--gold);
+    color: #1a1a1a;
+}
+
+.btn-danger {
+    background: #a83232;
+    color: white;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 13px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+th {
+    background: var(--table);
+    color: var(--gold);
+}
+
+.status {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: .85em;
+}
+
+.status-ok {
+    background: #245d3b;
+    color: #fff;
+}
+
+.status-low {
+    background: #8b5c12;
+    color: #fff;
+}
+
+.status-critical {
+    background: #a83232;
+    color: #fff;
+}
+
+form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    background: var(--table);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    font: inherit;
+}
+
+.form-buttons {
+    grid-column: 1 / -1;
+}
+
+.empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 25px;
+}
+
+.accessibility-controls {
+    display: grid;
+    gap: 18px;
+    margin-top: 25px;
+}
+
+.accessibility-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 18px;
+    background: var(--table);
+    border-radius: 8px;
+}
+
+.font-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.font-buttons button {
+    min-width: 48px;
+}
+
+.preview {
+    margin-top: 25px;
+    padding: 20px;
+    border: 1px solid var(--gold);
+    border-radius: 8px;
+}
+
+.footer-note {
+    color: var(--muted);
+    font-size: .9em;
+    margin-top: 25px;
+}
+
+/* MODO DE ALTO CONTRASTE */
+
+body.high-contrast {
+    --bg: #000;
+    --card: #000;
+    --text: #fff;
+    --gold: #ffff00;
+    --gold-hover: #ffff66;
+    --table: #000;
+    --border: #fff;
+    --muted: #fff;
+}
+
+body.high-contrast .panel,
+body.high-contrast .stat,
+body.high-contrast .accessibility-option {
+    border: 2px solid #fff;
+}
+
+body.high-contrast button,
+body.high-contrast .btn {
+    background: #ffff00;
+    color: #000;
+    border: 2px solid #fff;
+}
+
+body.high-contrast .btn-secondary {
+    background: #000;
+    color: #ffff00;
+    border: 2px solid #ffff00;
+}
+
+body.high-contrast .status {
+    border: 2px solid #fff;
+}
+
+@media(max-width: 650px) {
+    body { padding: 15px; }
+
+    .panel { padding: 17px; }
+
+    .grid { grid-template-columns: 1fr; }
+
+    form { grid-template-columns: 1fr; }
+
+    .form-buttons { grid-column: auto; }
+
+    .accessibility-option {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .table-wrapper { overflow-x: auto; }
+
+    table { min-width: 550px; }
+}
+</style>
 </head>
+
 <body>
-    <main>
-        <h1>Painel Central — Estoque e Alertas</h1>
-        {% for alerta in alertas %}
-        <div class="alerta" role="alert">
-            <strong>⚠️ ATENÇÃO:</strong> {{ alerta.nome }} em nível crítico ({{ alerta.quantidade }} restante).
+
+<div class="container">
+
+<header>
+    <div class="brand">Cantina & Confeitaria Artesanal</div>
+
+    <div class="header-actions">
+        <a href="#inicio" class="btn btn-secondary">Painel</a>
+        <a href="#estoque" class="btn btn-secondary">Estoque</a>
+        <a href="#acessibilidade" class="btn btn-secondary">
+            Acessibilidade
+        </a>
+    </div>
+</header>
+
+
+<!-- TELA 1: PAINEL CENTRAL -->
+
+<section id="inicio" class="page">
+<div class="panel">
+
+    <h1>Painel Central — Estoque e Alertas</h1>
+
+    <p class="subtitle">
+        Bem-vinda ao sistema de gestão da Cantina & Confeitaria Artesanal.
+    </p>
+
+    <div class="grid">
+
+        <div class="stat">
+            <span>Insumos cadastrados</span>
+            <strong id="total-insumos">0</strong>
         </div>
-        {% endfor %}
-        <button type="submit">Registrar Venda</button>
-    </main>
+
+        <div class="stat">
+            <span>Itens com estoque baixo</span>
+            <strong id="estoque-baixo">0</strong>
+        </div>
+
+        <div class="stat">
+            <span>Itens em situação crítica</span>
+            <strong id="estoque-critico">0</strong>
+        </div>
+
+    </div>
+
+    <h2>Resumo do Estoque</h2>
+
+    <p id="resumo-estoque" class="subtitle">
+        Nenhum insumo cadastrado até o momento.
+    </p>
+
+    <div class="actions">
+        <a href="#estoque" class="btn">Registrar Insumo</a>
+        <a href="#acessibilidade" class="btn btn-secondary">
+            Recursos de Acessibilidade
+        </a>
+    </div>
+
+</div>
+</section>
+
+
+<!-- TELA 2: CONTROLE DE INSUMOS -->
+
+<section id="estoque" class="page">
+<div class="panel">
+
+    <h1>Controle de Insumos e Estoque</h1>
+
+    <p class="subtitle">
+        Cadastre, acompanhe e consulte os insumos utilizados na cantina.
+    </p>
+
+    <h2>Cadastrar Novo Insumo</h2>
+
+    <form id="form-insumo">
+
+        <div class="field">
+            <label for="nome">Nome do insumo</label>
+            <input id="nome" type="text"
+                   placeholder="Ex.: Farinha de trigo" required>
+        </div>
+
+        <div class="field">
+            <label for="quantidade">Quantidade disponível</label>
+            <input id="quantidade" type="number"
+                   min="0" step="any" placeholder="Ex.: 10" required>
+        </div>
+
+        <div class="field">
+            <label for="minimo">Quantidade mínima para alerta</label>
+            <input id="minimo" type="number"
+                   min="0" step="any" value="5" required>
+        </div>
+
+        <div class="form-buttons">
+            <button type="submit">Cadastrar Insumo</button>
+        </div>
+
+    </form>
+
+    <h2>Insumos Cadastrados</h2>
+
+    <div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>Insumo</th>
+                <th>Quantidade</th>
+                <th>Estoque Mínimo</th>
+                <th>Status</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+
+        <tbody id="tabela-insumos"></tbody>
+    </table>
+    </div>
+
+    <div class="actions">
+        <a href="#inicio" class="btn btn-secondary">
+            ← Voltar ao Painel
+        </a>
+        <a href="#acessibilidade" class="btn">
+            Acessibilidade
+        </a>
+    </div>
+
+</div>
+</section>
+
+
+<!-- TELA 3: ACESSIBILIDADE -->
+
+<section id="acessibilidade" class="page">
+<div class="panel">
+
+    <h1>Central de Acessibilidade</h1>
+
+    <p class="subtitle">
+        Personalize a apresentação visual do sistema para facilitar
+        a leitura e a interação.
+    </p>
+
+    <div class="accessibility-controls">
+
+        <div class="accessibility-option">
+            <div>
+                <strong>Modo de alto contraste</strong>
+                <p class="subtitle">
+                    Aumenta o contraste entre fundo, textos e elementos.
+                </p>
+            </div>
+
+            <button id="btn-contraste"
+                    type="button"
+                    aria-pressed="false">
+                Ativar alto contraste
+            </button>
+        </div>
+
+        <div class="accessibility-option">
+            <div>
+                <strong>Tamanho da fonte</strong>
+                <p class="subtitle">
+                    Aumente ou reduza o tamanho dos textos.
+                </p>
+            </div>
+
+            <div class="font-buttons">
+                <button id="diminuir-fonte"
+                        type="button"
+                        aria-label="Diminuir tamanho da fonte">
+                    A−
+                </button>
+
+                <button id="aumentar-fonte"
+                        type="button"
+                        aria-label="Aumentar tamanho da fonte">
+                    A+
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="preview">
+        <h2>Prévia de Acessibilidade</h2>
+
+        <p>
+            Este é um exemplo de como os textos e elementos
+            do sistema serão apresentados com as configurações escolhidas.
+        </p>
+
+        <button type="button" onclick="document.getElementById('estoque').scrollIntoView()">
+            Exemplo de botão interativo
+        </button>
+
+        <p id="estado-acessibilidade" aria-live="polite">
+            Alto contraste desativado.
+        </p>
+    </div>
+
+    <h2>Dados reais cadastrados nesta aplicação</h2>
+
+    <p id="total-acessibilidade">
+        Nenhum insumo cadastrado.
+    </p>
+
+    <div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>Insumo</th>
+                <th>Quantidade</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="tabela-acessibilidade"></tbody>
+    </table>
+    </div>
+
+    <div class="actions">
+        <a href="#inicio" class="btn btn-secondary">
+            ← Voltar ao Painel
+        </a>
+        <a href="#estoque" class="btn">
+            Consultar Estoque
+        </a>
+    </div>
+
+    <p class="footer-note">
+        As configurações de acessibilidade são armazenadas
+        no navegador e aplicadas em todas as telas.
+    </p>
+
+</div>
+</section>
+
+</div>
+
+
+<script>
+
+// ========================================
+// NAVEGAÇÃO POR HASH
+// ========================================
+
+function navegar() {
+    const rota = location.hash.slice(1) || "inicio";
+
+    document.querySelectorAll(".page").forEach(p => {
+        p.classList.remove("active");
+    });
+
+    const pagina = document.getElementById(rota);
+
+    if (pagina) {
+        pagina.classList.add("active");
+    } else {
+        location.hash = "inicio";
+    }
+
+    atualizarInterface();
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    navegar();
+    carregarAcessibilidade();
+});
+
+window.addEventListener("hashchange", navegar);
+
+
+// ========================================
+// ARMAZENAMENTO DOS INSUMOS
+// ========================================
+
+function obterInsumos() {
+    return JSON.parse(localStorage.getItem("insumos_cantina") || "[]");
+}
+
+function salvarInsumos(insumos) {
+    localStorage.setItem("insumos_cantina", JSON.stringify(insumos));
+}
+
+
+// ========================================
+// CADASTRO DE INSUMOS
+// ========================================
+
+document.getElementById("form-insumo").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const nome = document.getElementById("nome").value.trim();
+    const quantidade = Number(document.getElementById("quantidade").value);
+    const minimo = Number(document.getElementById("minimo").value);
+
+    if (!nome || !Number.isFinite(quantidade) ||
+        !Number.isFinite(minimo) || quantidade < 0 || minimo < 0) {
+        alert("Informe valores válidos.");
+        return;
+    }
+
+    const insumos = obterInsumos();
+
+    insumos.push({
+        id: Date.now(),
+        nome,
+        quantidade,
+        minimo
+    });
+
+    salvarInsumos(insumos);
+
+    this.reset();
+    document.getElementById("minimo").value = 5;
+
+    atualizarInterface();
+
+    alert("Insumo cadastrado com sucesso!");
+});
+
+
+// ========================================
+// CLASSIFICAÇÃO DO ESTOQUE
+// ========================================
+
+function classificar(item) {
+    if (item.quantidade <= 0) return "Crítico";
+    if (item.quantidade <= item.minimo) return "Baixo";
+    return "Estável";
+}
+
+function classeStatus(status) {
+    if (status === "Crítico") return "status-critical";
+    if (status === "Baixo") return "status-low";
+    return "status-ok";
+}
+
+
+// ========================================
+// EXCLUSÃO DE INSUMOS
+// ========================================
+
+function excluirInsumo(id) {
+    if (!confirm("Deseja excluir este insumo?")) return;
+
+    const insumos = obterInsumos().filter(item => item.id !== id);
+
+    salvarInsumos(insumos);
+    atualizarInterface();
+}
+
+
+// ========================================
+// ATUALIZAÇÃO DAS TELAS
+// ========================================
+
+function atualizarInterface() {
+    const insumos = obterInsumos();
+
+    const total = insumos.length;
+    const baixos = insumos.filter(i =>
+        i.quantidade > 0 && i.quantidade <= i.minimo
+    ).length;
+    const criticos = insumos.filter(i =>
+        i.quantidade <= 0
+    ).length;
+
+    document.getElementById("total-insumos").textContent = total;
+    document.getElementById("estoque-baixo").textContent = baixos;
+    document.getElementById("estoque-critico").textContent = criticos;
+
+    document.getElementById("resumo-estoque").textContent =
+        total === 0
+        ? "Nenhum insumo cadastrado até o momento."
+        : `${total} insumo(s) cadastrado(s). ${baixos + criticos} com necessidade de atenção.`;
+
+    const tabela = document.getElementById("tabela-insumos");
+    const historico = document.getElementById("tabela-acessibilidade");
+
+    tabela.innerHTML = "";
+    historico.innerHTML = "";
+
+    if (total === 0) {
+        tabela.innerHTML = `
+            <tr>
+                <td colspan="5" class="empty">
+                    Nenhum insumo cadastrado.
+                </td>
+            </tr>`;
+
+        historico.innerHTML = `
+            <tr>
+                <td colspan="3" class="empty">
+                    Nenhum insumo cadastrado.
+                </td>
+            </tr>`;
+    }
+
+    insumos.forEach(item => {
+        const status = classificar(item);
+        const classe = classeStatus(status);
+
+        tabela.innerHTML += `
+            <tr>
+                <td>${escapar(item.nome)}</td>
+                <td>${item.quantidade}</td>
+                <td>${item.minimo}</td>
+                <td><span class="status ${classe}">${status}</span></td>
+                <td>
+                    <button class="btn-danger"
+                        onclick="excluirInsumo(${item.id})">
+                        Excluir
+                    </button>
+                </td>
+            </tr>`;
+
+        historico.innerHTML += `
+            <tr>
+                <td>${escapar(item.nome)}</td>
+                <td>${item.quantidade}</td>
+                <td><span class="status ${classe}">${status}</span></td>
+            </tr>`;
+    });
+
+    document.getElementById("total-acessibilidade").textContent =
+        `${total} insumo(s) cadastrado(s) na aplicação.`;
+}
+
+function escapar(valor) {
+    return String(valor).replace(/[&<>"']/g, caractere => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[caractere]);
+}
+
+
+// ========================================
+// ACESSIBILIDADE: ALTO CONTRASTE
+// ========================================
+
+function carregarAcessibilidade() {
+    const contraste = localStorage.getItem("alto_contraste") === "true";
+    const fonte = Number(localStorage.getItem("fonte_sistema")) || 16;
+
+    document.body.classList.toggle("high-contrast", contraste);
+    document.documentElement.style.setProperty("--font-size", fonte + "px");
+
+    atualizarBotaoContraste();
+}
+
+function atualizarBotaoContraste() {
+    const ativo = document.body.classList.contains("high-contrast");
+    const botao = document.getElementById("btn-contraste");
+
+    botao.textContent = ativo
+        ? "Desativar alto contraste"
+        : "Ativar alto contraste";
+
+    botao.setAttribute("aria-pressed", String(ativo));
+
+    document.getElementById("estado-acessibilidade").textContent =
+        ativo
+        ? "Alto contraste ativado."
+        : "Alto contraste desativado.";
+}
+
+document.getElementById("btn-contraste").addEventListener("click", () => {
+    const ativo = document.body.classList.toggle("high-contrast");
+
+    localStorage.setItem("alto_contraste", ativo);
+
+    atualizarBotaoContraste();
+});
+
+
+// ========================================
+// ACESSIBILIDADE: TAMANHO DA FONTE
+// ========================================
+
+function alterarFonte(valor) {
+    let atual = Number(localStorage.getItem("fonte_sistema")) || 16;
+
+    atual = Math.max(12, Math.min(24, atual + valor));
+
+    localStorage.setItem("fonte_sistema", atual);
+
+    document.documentElement.style.setProperty("--font-size", atual + "px");
+}
+
+document.getElementById("aumentar-fonte").addEventListener("click", () => {
+    alterarFonte(2);
+});
+
+document.getElementById("diminuir-fonte").addEventListener("click", () => {
+    alterarFonte(-2);
+});
+
+</script>
+
 </body>
 </html>
