@@ -12,6 +12,12 @@ def index():
     alertas = [i for i in insumos if i.alerta_critico]
     return render_template("index.html", insumos=insumos, alertas=alertas)
 
+@app.route("/historico")
+def historico():
+    # Pode listar insumos ou vendas realizadas
+    insumos = Insumo.query.all()
+    return render_template("historico.html", insumos=insumos)
+    
 @app.route("/vender/<int:insumo_id>", methods=["POST"])
 def registrar_venda(insumo_id):
     qtd = float(request.form.get("quantidade", 1))
