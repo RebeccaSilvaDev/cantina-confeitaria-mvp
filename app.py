@@ -6,6 +6,10 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///cantina.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 
+# CRIAÇÃO AUTOMÁTICA DAS TABELAS NO STARTUP (Essencial para a Render)
+with app.app_context():
+    db.create_all()
+    
 @app.route("/")
 def index():
     insumos = Insumo.query.all()
