@@ -1,6 +1,7 @@
 from datetime import date
 from flask_sqlalchemy import SQLAlchemy
 from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
 
 db = SQLAlchemy()
 ph = PasswordHasher()
@@ -14,7 +15,10 @@ class Gestora(db.Model):
         self.senha_hash = ph.hash(senha_plana)
 
     def verificar_senha(self, senha_plana: str) -> bool:
-        return ph.verify(self.senha_hash, senha_plana)
+        try:
+            return ph.verify(self.senha_hash, senha_plana)
+        except VerifyMismatchError:
+            return False
 
 class Insumo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
